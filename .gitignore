@@ -113,3 +113,9 @@ Thumbs.db
 .project
 .pydevproject
 .settings/
+
+# ---------------------------------------------------------
+# Website (Next.js, deployed on Vercel from /website)
+# ---------------------------------------------------------
+!website/src/lib/
+!website/public/models/*.onnx
