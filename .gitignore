@@ -119,3 +119,6 @@ Thumbs.db
 # ---------------------------------------------------------
 !website/src/lib/
 !website/public/models/*.onnx
+
+# Local Claude Code dev-server config (machine-specific paths)
+.claude/
