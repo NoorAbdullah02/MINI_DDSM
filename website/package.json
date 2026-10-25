@@ -15,12 +15,15 @@
     "motion": "^14.6.0",
     "next": "^16.4.2",
     "onnxruntime-web": "^1.30.0",
+    "pptxgenjs": "^4.0.1",
+    "qrcode": "^1.5.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
