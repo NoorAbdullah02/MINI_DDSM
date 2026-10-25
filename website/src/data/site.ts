@@ -138,6 +138,20 @@ export const gradcam = [
   { key: "fn", label: "False negative", note: "The model looks near the lesion but the score stays below threshold." },
 ];
 
+// Related work on Mini-DDSM (and one DDSM-pretrained-CNN baseline), gathered
+// for context — not a ranking. None of these published splits confirm
+// patient grouping, so their image-level accuracies likely sit above what a
+// leakage-free evaluation of the same model would show. Figures and links
+// verified 25 Oct 2026.
+export const relatedWork = [
+  { study: "Heenaye-Mamode Khan et al.", year: 2021, venue: "PLOS ONE", method: "ResNet-50, fine-tuned", metric: "Acc.", value: 0.88, grouped: false, href: "https://doi.org/10.1371/journal.pone.0256500" },
+  { study: "Ansar et al.", year: 2020, venue: "ISICS", method: "MobileNet transfer learning", metric: "Acc.", value: 0.87, grouped: false, href: "https://scholar.google.com/scholar?q=Ansar+MobileNet+breast+cancer+mammogram+ISICS+2020" },
+  { study: "Khourdifi et al.", year: 2024, venue: "BioMedInformatics", method: "VGG16 + DenseNet121 + InceptionV3 ensemble", metric: "Acc.", value: 0.895, grouped: false, href: "https://scholar.google.com/scholar?q=Khourdifi+early+breast+cancer+detection+ensemble+BioMedInformatics+2024" },
+  { study: "Kacher", year: 2024, venue: "Univ. of Tiaret / UMons repository", method: "4-model pretrained ensemble", metric: "Acc.", value: 0.9418, grouped: undefined, href: "https://orbi.umons.ac.be/handle/20.500.12907/51489" },
+  { study: "Sahu et al.", year: 2023, venue: "Biomed. Signal Process. Control", method: "Hybrid CNN (AlexNet+ResNet+MobileNetV2)", metric: "Acc.", value: 0.9917, grouped: false, href: "https://scholar.google.com/scholar?q=Sahu+hybrid+CNN+breast+cancer+mammogram+ultrasound+2023" },
+  { study: "Cossa (arXiv)", year: 2024, venue: "arXiv:2412.17959", method: "Off-the-shelf pretrained CNNs (no fine-tuning)", metric: "Acc.", value: 0.61, valueHigh: 0.65, grouped: undefined, href: "https://arxiv.org/abs/2412.17959" },
+] as const;
+
 export const bibtex = `@inproceedings{abdullah2026minidsm,
   title     = {Multi-Backbone Ensemble Learning for Robust Breast Cancer
                Classification on the Mini-DDSM Mammography Dataset},

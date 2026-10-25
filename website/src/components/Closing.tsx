@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy, FileText, Mail } from "lucide-react";
+import { Check, Copy, FileText, Mail, Presentation } from "lucide-react";
 import { useState } from "react";
 import { affiliation, authors, bibtex, paper } from "@/data/site";
 import { Card, GithubIcon, Reveal, Section } from "./ui";
@@ -93,20 +93,102 @@ export function Team() {
   );
 }
 
+const footerCols = [
+  {
+    heading: "Explore",
+    links: [
+      { label: "The problem", href: "#problem" },
+      { label: "Related work", href: "#compare" },
+      { label: "Data audit", href: "#audit" },
+      { label: "Method", href: "#method" },
+      { label: "Results", href: "#results" },
+      { label: "Live demo", href: "#demo" },
+      { label: "Grad-CAM", href: "#explain" },
+    ],
+  },
+  {
+    heading: "Resources",
+    links: [
+      { label: "Paper (PDF)", href: paper.pdf, external: true },
+      { label: "GitHub repository", href: paper.code, external: true },
+      { label: "Presentation deck", href: "/present" },
+      { label: "BibTeX citation", href: "#cite" },
+      { label: "Team", href: "#team" },
+    ],
+  },
+];
+
+function FooterLink({ label, href, external }: { label: string; href: string; external?: boolean }) {
+  return (
+    <a
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener" : undefined}
+      className="group relative inline-block w-fit text-sm text-muted transition-colors hover:text-ink"
+    >
+      {label}
+      <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-rose transition-transform duration-300 ease-out group-hover:scale-x-100" />
+    </a>
+  );
+}
+
 export function Footer() {
   return (
-    <footer className="border-t border-line px-4 py-10 sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
-        <span>
-          © 2026 The authors · {paper.venueShort}, {paper.location}
-        </span>
-        <span>Mini-DDSM: Lekamlage et al., DMIP 2020. Images shown for research illustration.</span>
+    <footer className="relative border-t border-line bg-paper-2/40">
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-rose/40 to-transparent" />
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <div className="grid gap-12 md:grid-cols-[1.3fr_1fr_1fr]">
+          <Reveal>
+            <div>
+              <a href="#top" className="flex items-center gap-2.5">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-rose-soft">
+                  <span className="h-3 w-3 rounded-full bg-rose" />
+                </span>
+                <span className="font-serif text-lg text-ink">Mini-DDSM</span>
+              </a>
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
+                A patient-grouped, leakage-audited evaluation of breast-cancer classification on Mini-DDSM, with a reproducible protocol and a
+                live in-browser demo.
+              </p>
+              <a
+                href="/present"
+                className="mt-5 inline-flex items-center gap-2 rounded-full border border-line bg-card px-4 py-2 text-xs font-medium text-ink-2 transition hover:-translate-y-0.5 hover:border-line-2"
+              >
+                <Presentation size={13} /> Open the slide deck
+              </a>
+            </div>
+          </Reveal>
+
+          {footerCols.map((col, ci) => (
+            <Reveal key={col.heading} delay={0.08 + ci * 0.06}>
+              <div>
+                <h4 className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-2">{col.heading}</h4>
+                <ul className="mt-4 space-y-3">
+                  {col.links.map((l) => (
+                    <li key={l.label}>
+                      <FooterLink {...l} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={0.2}>
+          <div className="mt-14 flex flex-col gap-3 border-t border-line pt-6 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
+            <span>
+              © 2026 The authors · {paper.venueShort}, {paper.location}
+            </span>
+            <span>Mini-DDSM: Lekamlage et al., DMIP 2020. Images shown for research illustration.</span>
+          </div>
+          <p className="mt-4 text-[11px] leading-relaxed text-faint">
+            Paper © 2026 IEEE. Personal use of this material is permitted. Permission from IEEE must be obtained for all other uses, in any
+            current or future media, including reprinting/republishing this material for advertising or promotional purposes, creating new
+            collective works, for resale or redistribution to servers or lists, or reuse of any copyrighted component of this work in other works.
+          </p>
+        </Reveal>
       </div>
-      <p className="mx-auto mt-4 max-w-6xl text-[11px] leading-relaxed text-faint">
-        Paper © 2026 IEEE. Personal use of this material is permitted. Permission from IEEE must be obtained for all other uses, in any current or
-        future media, including reprinting/republishing this material for advertising or promotional purposes, creating new collective works, for
-        resale or redistribution to servers or lists, or reuse of any copyrighted component of this work in other works.
-      </p>
     </footer>
   );
 }
