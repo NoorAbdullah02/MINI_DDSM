@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, HelpCircle, ShieldCheck, XCircle } from "lucide-react";
+import { ArrowUpRight, HelpCircle, Sparkles, ShieldCheck, Target, XCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { relatedWork } from "@/data/site";
 import { Card, Reveal, Section } from "./ui";
@@ -77,9 +77,14 @@ export function Compare() {
                     </td>
                   </tr>
                 ))}
-                <tr className="bg-rose-soft/40">
+                <tr className="relative bg-rose-soft/40">
                   <td className="px-6 py-4">
-                    <span className="font-semibold text-ink">This work</span> <span className="text-faint">· 2026</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-ink">This work</span> <span className="text-faint">· 2026</span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[10px] font-semibold text-paper">
+                        <Sparkles size={10} /> Most rigorous
+                      </span>
+                    </div>
                     <div className="text-xs text-rose-deep">IEEE CSDE 2026</div>
                   </td>
                   <td className="px-3 py-4 text-ink-2">EfficientNet-B4 + ConvNeXtV2-Tiny, fixed 50/50</td>
@@ -110,15 +115,30 @@ export function Compare() {
         </Card>
       </Reveal>
 
-      <div className="mt-8 grid gap-5 md:grid-cols-3">
+      <Reveal delay={0.15}>
+        <div className="mt-8 rounded-3xl border border-ink/10 bg-ink px-8 py-9 text-center sm:px-14">
+          <Target size={22} className="mx-auto text-rose" />
+          <p className="mx-auto mt-4 max-w-2xl font-serif text-2xl leading-snug text-paper sm:text-3xl">
+            The number worth trusting isn&rsquo;t the <span className="text-gold">highest</span> one on this page —
+            it&rsquo;s the <span className="italic text-rose">only one you can check.</span>
+          </p>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-paper/60">
+            Every figure in &ldquo;This work&rdquo; traces back to a public patient manifest, a leakage audit and a fixed random seed — not just a
+            number in an abstract.
+          </p>
+        </div>
+      </Reveal>
+
+      <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         {[
-          { t: "Not the highest number", d: "0.812 sits below four of the five prior reports here — by design, not by accident." },
-          { t: "The only audited split", d: "2,417 patient groups, 0 cross-fold overlap, verified on all 9 seed–fold combinations — checkable in the repo." },
-          { t: "Repeated, not lucky", d: "3 seeds × 3 folds with bootstrap confidence intervals, so the number comes with its own uncertainty." },
+          { t: "Not the highest number", d: "0.812 sits below four of the five prior reports here — by design, not by accident.", icon: ShieldCheck },
+          { t: "The only audited split", d: "2,417 patient groups, 0 cross-fold overlap, verified on all 9 seed–fold combinations — checkable in the repo.", icon: ShieldCheck },
+          { t: "Repeated, not lucky", d: "3 seeds × 3 folds with bootstrap confidence intervals, so the number comes with its own uncertainty.", icon: ShieldCheck },
+          { t: "The task is genuinely hard", d: "Off-the-shelf pretrained CNNs score just 61–65% on this same dataset — the spread above hides how much careful protocol actually buys you.", icon: Sparkles },
         ].map((c, i) => (
-          <Reveal key={c.t} delay={i * 0.08}>
+          <Reveal key={c.t} delay={i * 0.06}>
             <div className="h-full rounded-2xl border border-line bg-card/70 p-6">
-              <ShieldCheck size={18} className="text-teal" />
+              <c.icon size={18} className={c.icon === Sparkles ? "text-gold" : "text-teal"} />
               <h3 className="mt-3 text-base font-semibold text-ink">{c.t}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">{c.d}</p>
             </div>
