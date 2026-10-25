@@ -1,0 +1,15 @@
+item,implemented,output
+Patient-ID collision documented,True,raw_patient_id_collisions.csv + patient_id_collision_affected_records.csv
+Corrected manifest exported,True,corrected_patient_manifest.csv
+Exact split files exported,True,split_seed_<seed>.csv
+3-fold repeated across seeds,True,"[42, 123, 2026]"
+Patient/image fold balance,True,fold_class_balance.csv
+Leakage verification,True,leakage_audit.csv
+Primary equal-average ensemble retained,True,equal_avg_primary
+Single-backbone identical-TTA comparison,True,reviewer_baseline_comparison.csv
+Sensitivity/specificity/PPV/NPV + CIs,True,patient_bootstrap_95ci.csv
+Default + train-side Youden thresholds,True,inner_tuning_choices.csv
+Calibration,True,calibration_*.png / metrics_by_seed.csv
+Decision curve,True,decision_curve_primary.png
+False-negative malignant analysis,True,false_negative_patient_analysis.csv
+External validation,False,CBIS-DDSM

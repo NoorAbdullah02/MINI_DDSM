@@ -1,0 +1,5 @@
+class_folder,raw_patient_id,n_images,n_case_instances
+Benign,A_1512,8,2
+Benign,B_3470,8,2
+Benign,C_0412,8,2
+Benign,C_0478,8,2

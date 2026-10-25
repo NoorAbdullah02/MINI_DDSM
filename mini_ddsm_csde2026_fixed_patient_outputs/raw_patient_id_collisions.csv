@@ -1,0 +1,4 @@
+raw_patient_id,n_class_folders,class_folders,n_images
+A_1500,2,Benign|Cancer,8
+A_1511,2,Benign|Cancer,8
+A_1632,2,Benign|Cancer,8

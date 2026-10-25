@@ -1,0 +1,33 @@
+{
+  "DATA_ROOT": "/Research/MINI_DDSM/archive (1)/Mini_DDSM_Upload",
+  "IMG_SIZE": 512,
+  "N_FOLDS": 3,
+  "SEEDS": [
+    42,
+    123,
+    2026
+  ],
+  "INNER_VAL_FRACTION": 0.12,
+  "BATCH_SIZE": 8,
+  "GRAD_ACCUM_STEPS": 2,
+  "NUM_WORKERS": 4,
+  "BACKBONES": [
+    "tf_efficientnet_b4",
+    "convnextv2_tiny"
+  ],
+  "BACKBONE_LR": {
+    "tf_efficientnet_b4": 0.0002,
+    "convnextv2_tiny": 5e-05
+  },
+  "BACKBONE_MAX_EPOCHS": {
+    "tf_efficientnet_b4": 25,
+    "convnextv2_tiny": 17
+  },
+  "BACKBONE_PATIENCE": {
+    "tf_efficientnet_b4": 6,
+    "convnextv2_tiny": 4
+  },
+  "PATIENT_AGG": "mean",
+  "N_BOOT": 2000,
+  "PRIMARY_ENSEMBLE": "unweighted 50/50 probability average"
+}

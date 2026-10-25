@@ -1,0 +1,115 @@
+# ==============================================================================
+# .gitignore for Mini-DDSM Deep Learning Project (IEEE CSDE 2026)
+# ==============================================================================
+
+# ---------------------------------------------------------
+# Python Environment & Bytecode
+# ---------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ---------------------------------------------------------
+# Virtual Environments
+# ---------------------------------------------------------
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+.conda/
+.env
+
+# ---------------------------------------------------------
+# Jupyter Notebooks & Checkpoints
+# ---------------------------------------------------------
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+.jupyter/
+
+# ---------------------------------------------------------
+# Deep Learning Model Weights & Checkpoints (>100MB / binary)
+# ---------------------------------------------------------
+*.pt
+*.pth
+*.pwf
+*.bin
+*.ckpt
+*.h5
+*.hdf5
+*.onnx
+*.tflite
+*.safetensors
+**/checkpoints/
+checkpoints/
+
+# ---------------------------------------------------------
+# Datasets, Archives & Large Raw Data
+# ---------------------------------------------------------
+archive*/
+archive (1)/
+Mini_DDSM_Upload
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.bz2
+*.xz
+*.iso
+
+# ---------------------------------------------------------
+# Logs, Temp & Cache Files
+# ---------------------------------------------------------
+*.log
+*.tmp
+*.temp
+*~
+*.swp
+*.swo
+.cache/
+tmp/
+temp/
+scratch/
+
+# ---------------------------------------------------------
+# Operating System & IDE Specific
+# ---------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/

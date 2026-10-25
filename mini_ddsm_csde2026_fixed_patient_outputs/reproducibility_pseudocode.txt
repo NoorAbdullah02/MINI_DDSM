@@ -1,0 +1,21 @@
+PATIENT-ID NORMALIZATION / COLLISION CORRECTION
+1. From a filename prefix such as 1_C_0029_1, parse raw patient ID as C_0029 (not the leading image index).
+2. Preserve raw_patient_id for audit.
+3. Construct corrected patient_id = class_folder + "::" + raw_patient_id.
+4. Export raw IDs appearing in more than one class namespace.
+5. Keep every image of a corrected patient together.
+
+OUTER EVALUATION
+1. Collapse to one row per corrected patient.
+2. Stratify patients into 3 outer folds.
+3. Repeat the 3-fold experiment for multiple random seeds.
+4. Export exact split files.
+
+INNER TRAINING / MODEL SELECTION
+1. Split only outer-training patients into inner-train and inner-validation.
+2. Train each backbone on inner-train only.
+3. Select checkpoints using inner-validation patient AUC without TTA.
+4. Generate identical four-view TTA predictions for all final comparisons.
+5. Primary ensemble = unweighted 50/50 patient-level probability average.
+6. Select Youden threshold and fit calibration on inner-validation only.
+7. Evaluate outer-test patients once.
