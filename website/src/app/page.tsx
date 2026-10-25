@@ -1,7 +1,6 @@
 import { Audit } from "@/components/Audit";
 import { Calibration } from "@/components/Calibration";
 import { Cite, Footer, Takeaways, Team } from "@/components/Closing";
-import { Compare } from "@/components/Compare";
 import { Demo } from "@/components/Demo";
 import { GradCam } from "@/components/GradCam";
 import { Hero } from "@/components/Hero";
@@ -19,7 +18,6 @@ export default function Home() {
       <main>
         <Hero />
         <Problem />
-        <Compare />
         <Audit />
         <Method />
         <Results />

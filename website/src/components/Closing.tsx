@@ -98,7 +98,6 @@ const footerCols = [
     heading: "Explore",
     links: [
       { label: "The problem", href: "#problem" },
-      { label: "Related work", href: "#compare" },
       { label: "Data audit", href: "#audit" },
       { label: "Method", href: "#method" },
       { label: "Results", href: "#results" },
