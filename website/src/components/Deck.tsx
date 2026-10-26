@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, animate as animateValue, motion, useMotionValue, useTransform } from "motion/react";
+import { AnimatePresence, animate as animateValue, motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import {
   Check,
   ChevronLeft,
@@ -10,6 +10,12 @@ import {
   LayoutGrid,
   Loader2,
   Maximize,
+  MousePointerClick,
+  Pause,
+  Play,
+  PanelRightClose,
+  PanelRightOpen,
+  RotateCcw,
   Smartphone,
   StickyNote,
   X,
@@ -778,11 +784,121 @@ function Overview({ i, onSelect, onClose }: { i: number; onSelect: (n: number) =
   );
 }
 
+// A soft, spring-trailing red dot for pointing at things live on a projector —
+// fixed to the viewport, tracks the raw pointer position smoothed by a spring
+// so it glides rather than snaps.
+function LaserDot({ active }: { active: boolean }) {
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const sx = useSpring(x, { stiffness: 700, damping: 40 });
+  const sy = useSpring(y, { stiffness: 700, damping: 40 });
+
+  useEffect(() => {
+    if (!active) return;
+    const onMove = (e: PointerEvent) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
+    };
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [active, x, y]);
+
+  if (!active) return null;
+  return (
+    <motion.div
+      className="pointer-events-none fixed top-0 left-0 z-[90] h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-rose shadow-[0_0_18px_6px_rgba(194,58,107,0.65)]"
+      style={{ x: sx, y: sy }}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+    />
+  );
+}
+
+function formatClock(totalSeconds: number) {
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+// A right-hand presenter aside: elapsed timer, what's up next, and the full
+// speaker notes in a larger, easier-to-read type size — everything a speaker
+// needs without turning their head to a second monitor.
+function PresenterPanel({ i, onClose }: { i: number; onClose: () => void }) {
+  const [seconds, setSeconds] = useState(0);
+  const [running, setRunning] = useState(true);
+
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => setSeconds((s) => s + 1), 1000);
+    return () => clearInterval(id);
+  }, [running]);
+
+  const next = slides[i + 1];
+
+  return (
+    <motion.aside
+      initial={{ x: 20, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: 20, opacity: 0 }}
+      transition={{ duration: 0.3, ease: EASE }}
+      className="flex w-[360px] shrink-0 flex-col border-l border-line bg-card"
+    >
+      <div className="flex items-center justify-between border-b border-line px-5 py-4">
+        <span className="text-sm font-semibold text-ink">Presenter view</span>
+        <button onClick={onClose} className="rounded-full p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label="Close presenter view">
+          <X size={16} />
+        </button>
+      </div>
+
+      <div className="border-b border-line px-5 py-5">
+        <div className="flex items-center justify-between">
+          <span className="num font-mono text-3xl text-ink">{formatClock(seconds)}</span>
+          <div className="flex gap-1.5">
+            <button onClick={() => setRunning((r) => !r)} className="rounded-full border border-line p-2 text-ink-2 hover:bg-paper-2" aria-label={running ? "Pause timer" : "Resume timer"}>
+              {running ? <Pause size={14} /> : <Play size={14} />}
+            </button>
+            <button
+              onClick={() => {
+                setSeconds(0);
+                setRunning(true);
+              }}
+              className="rounded-full border border-line p-2 text-ink-2 hover:bg-paper-2"
+              aria-label="Reset timer"
+            >
+              <RotateCcw size={14} />
+            </button>
+          </div>
+        </div>
+        <p className="mt-1 text-xs text-faint">Elapsed time · started when this panel opened</p>
+      </div>
+
+      <div className="border-b border-line px-5 py-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-faint">Up next</p>
+        {next ? (
+          <div className="mt-2 flex items-center gap-2.5">
+            <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: next.accent }} />
+            <span className="text-sm font-medium text-ink-2">{next.title}</span>
+          </div>
+        ) : (
+          <p className="mt-2 text-sm text-muted">This is the last slide.</p>
+        )}
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-rose">Speaker notes · {slides[i].title}</p>
+        <p className="mt-3 text-[15px] leading-relaxed text-ink-2">{slides[i].notes}</p>
+      </div>
+    </motion.aside>
+  );
+}
+
 export function Deck() {
   const [i, setI] = useState(0);
   const [dir, setDir] = useState(1);
   const [notes, setNotes] = useState(false);
   const [overview, setOverview] = useState(false);
+  const [presenter, setPresenter] = useState(false);
+  const [laser, setLaser] = useState(false);
   const [scale, setScale] = useState(1);
   const [exportState, setExportState] = useState<{ phase: "idle" | "working" | "done" | "error"; label: string }>({ phase: "idle", label: "" });
   const wrap = useRef<HTMLDivElement>(null);
@@ -813,7 +929,7 @@ export function Deck() {
     fit();
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);
-  }, [notes]);
+  }, [notes, presenter]);
 
   // Deep links (/present#7). The URL is only written after the initial hash has been read.
   const hashRead = useRef(false);
@@ -845,6 +961,8 @@ export function Deck() {
       else if (e.key.toLowerCase() === "n") setNotes((v) => !v);
       else if (e.key.toLowerCase() === "o") setOverview(true);
       else if (e.key.toLowerCase() === "f") document.documentElement.requestFullscreen?.();
+      else if (e.key.toLowerCase() === "p") setPresenter((v) => !v);
+      else if (e.key.toLowerCase() === "l") setLaser((v) => !v);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -865,51 +983,57 @@ export function Deck() {
 
   return (
     <div className="flex h-dvh flex-col bg-paper-2">
-      <div
-        ref={wrap}
-        className="relative flex-1 overflow-hidden"
-        onClick={(e) => {
-          if (overview) return;
-          const r = wrap.current!.getBoundingClientRect();
-          ripples.spawn(e.clientX - r.left, e.clientY - r.top);
-          if (e.clientX > window.innerWidth / 2) go(i + 1);
-          else go(i - 1);
-        }}
-      >
-        {ripples.node}
+      <LaserDot active={laser} />
+      <div className="flex min-h-0 flex-1">
         <div
-          className="grain absolute top-1/2 left-1/2 overflow-hidden rounded-[18px] bg-paper shadow-[var(--shadow-lift)]"
-          style={{ width: SW, height: SH, transform: `translate(-50%, -50%) scale(${scale})` }}
+          ref={wrap}
+          className="relative flex-1 overflow-hidden"
+          style={laser ? { cursor: "none" } : undefined}
+          onClick={(e) => {
+            if (overview) return;
+            const r = wrap.current!.getBoundingClientRect();
+            ripples.spawn(e.clientX - r.left, e.clientY - r.top);
+            if (e.clientX > window.innerWidth / 2) go(i + 1);
+            else go(i - 1);
+          }}
         >
-          <Glow color={slides[i].accent} />
-          <DustMotes color={slides[i].accent} />
+          {ripples.node}
+          <div
+            className="grain absolute top-1/2 left-1/2 overflow-hidden rounded-[18px] bg-paper shadow-[var(--shadow-lift)]"
+            style={{ width: SW, height: SH, transform: `translate(-50%, -50%) scale(${scale})` }}
+          >
+            <Glow color={slides[i].accent} />
+            <DustMotes color={slides[i].accent} />
 
-          <AnimatePresence mode="wait" custom={dir}>
-            <motion.div
-              key={i}
-              custom={dir}
-              initial={{ opacity: 0, x: 70 * dir, scale: 0.97, filter: "blur(8px)" }}
-              animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, x: -70 * dir, scale: 0.97, filter: "blur(8px)" }}
-              transition={{ duration: 0.55, ease: EASE }}
-              className="absolute inset-0 px-[110px] py-[92px]"
-            >
-              {slides[i].body}
-            </motion.div>
-          </AnimatePresence>
+            <AnimatePresence mode="wait" custom={dir}>
+              <motion.div
+                key={i}
+                custom={dir}
+                initial={{ opacity: 0, x: 70 * dir, scale: 0.97, filter: "blur(8px)" }}
+                animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
+                exit={{ opacity: 0, x: -70 * dir, scale: 0.97, filter: "blur(8px)" }}
+                transition={{ duration: 0.55, ease: EASE }}
+                className="absolute inset-0 px-[110px] py-[92px]"
+              >
+                {slides[i].body}
+              </motion.div>
+            </AnimatePresence>
 
-          <TickBar i={i} total={slides.length} onJump={jump} />
+            <TickBar i={i} total={slides.length} onJump={jump} />
 
-          <div className="absolute inset-x-[110px] bottom-8 flex items-center justify-between text-[15px] text-faint">
-            <span>{paper.venueShort} · Mini-DDSM patient-grouped ensemble</span>
-            <span className="font-mono">{String(i + 1).padStart(2, "0")} / {slides.length} · {slides[i].title}</span>
+            <div className="absolute inset-x-[110px] bottom-8 flex items-center justify-between text-[15px] text-faint">
+              <span>{paper.venueShort} · Mini-DDSM patient-grouped ensemble</span>
+              <span className="font-mono">{String(i + 1).padStart(2, "0")} / {slides.length} · {slides[i].title}</span>
+            </div>
+
+            <AnimatePresence>{overview && <Overview i={i} onSelect={jump} onClose={() => setOverview(false)} />}</AnimatePresence>
           </div>
-
-          <AnimatePresence>{overview && <Overview i={i} onSelect={jump} onClose={() => setOverview(false)} />}</AnimatePresence>
         </div>
+
+        <AnimatePresence>{presenter && <PresenterPanel i={i} onClose={() => setPresenter(false)} />}</AnimatePresence>
       </div>
 
-      {notes && (
+      {notes && !presenter && (
         <div className="max-h-[30vh] overflow-y-auto border-t border-line bg-card px-6 py-4 text-[15px] leading-relaxed text-ink-2">
           <span className="mr-2 font-semibold text-rose">Speaker notes · {slides[i].title}</span>
           {slides[i].notes}
@@ -926,6 +1050,12 @@ export function Deck() {
         <div className="flex items-center gap-1">
           <button onClick={() => setOverview(true)} className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 hover:bg-paper-2"><LayoutGrid size={15} /> Overview (O)</button>
           <button onClick={() => setNotes(!notes)} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 ${notes ? "bg-rose-soft text-rose-deep" : "hover:bg-paper-2"}`}><StickyNote size={15} /> Notes (N)</button>
+          <button onClick={() => setPresenter((v) => !v)} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 ${presenter ? "bg-indigo-soft text-indigo" : "hover:bg-paper-2"}`}>
+            {presenter ? <PanelRightClose size={15} /> : <PanelRightOpen size={15} />} Presenter (P)
+          </button>
+          <button onClick={() => setLaser((v) => !v)} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 ${laser ? "bg-rose-soft text-rose-deep" : "hover:bg-paper-2"}`}>
+            <MousePointerClick size={15} /> Laser (L)
+          </button>
           <button onClick={() => document.documentElement.requestFullscreen?.()} className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 hover:bg-paper-2"><Maximize size={15} /> Full screen (F)</button>
           <button
             onClick={handleDownload}

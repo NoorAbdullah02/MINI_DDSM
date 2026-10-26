@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import { backbones } from "@/data/site";
-import { Card, Reveal, Section } from "./ui";
+import { Card, Reveal, Section, TiltCard } from "./ui";
 
 const steps = [
   { icon: ScanLine, t: "Otsu tissue mask", d: "Separate breast tissue from background, close small holes." },
@@ -61,25 +61,27 @@ export function Method() {
       <div className="mt-10 grid gap-6 md:grid-cols-2">
         {backbones.map((b, i) => (
           <Reveal key={b.name} delay={i * 0.1}>
-            <Card className="relative h-full overflow-hidden p-7">
-              <div className="absolute -top-16 -right-16 h-44 w-44 rounded-full opacity-10" style={{ background: b.color }} />
-              <span className="text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: b.color }}>{b.tag}</span>
-              <h3 className="mt-2 font-serif text-3xl text-ink">{b.name}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{b.blurb}</p>
-              <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 text-sm sm:grid-cols-4">
-                {[
-                  ["Learning rate", b.lr],
-                  ["Max epochs", b.epochs],
-                  ["Patience", b.patience],
-                  ["Outer AUC", b.outerAuc],
-                ].map(([k, v]) => (
-                  <div key={k as string}>
-                    <dt className="text-xs text-faint">{k}</dt>
-                    <dd className="num mt-0.5 font-semibold text-ink">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-            </Card>
+            <TiltCard glow={b.color} className="h-full">
+              <Card className="relative h-full overflow-hidden p-7">
+                <div className="absolute -top-16 -right-16 h-44 w-44 rounded-full opacity-10" style={{ background: b.color }} />
+                <span className="text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: b.color }}>{b.tag}</span>
+                <h3 className="mt-2 font-serif text-3xl text-ink">{b.name}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">{b.blurb}</p>
+                <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 text-sm sm:grid-cols-4">
+                  {[
+                    ["Learning rate", b.lr],
+                    ["Max epochs", b.epochs],
+                    ["Patience", b.patience],
+                    ["Outer AUC", b.outerAuc],
+                  ].map(([k, v]) => (
+                    <div key={k as string}>
+                      <dt className="text-xs text-faint">{k}</dt>
+                      <dd className="num mt-0.5 font-semibold text-ink">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </Card>
+            </TiltCard>
           </Reveal>
         ))}
       </div>

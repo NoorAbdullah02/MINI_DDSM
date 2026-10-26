@@ -8,9 +8,33 @@ import { CountUp, GithubIcon } from "./ui";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+// Three oversized, heavily blurred blobs drifting on independent loops —
+// pure transform animation (GPU-only), so it stays smooth at full-bleed.
+function AmbientMesh() {
+  const blobs = [
+    { color: "var(--color-rose)", size: 520, x: "8%", y: "-10%", dur: 22, dx: [0, 60, -20, 0], dy: [0, 40, 70, 0] },
+    { color: "var(--color-indigo)", size: 460, x: "78%", y: "10%", dur: 26, dx: [0, -50, 30, 0], dy: [0, 60, -30, 0] },
+    { color: "var(--color-gold)", size: 380, x: "45%", y: "55%", dur: 30, dx: [0, 40, -60, 0], dy: [0, -50, 20, 0] },
+  ];
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.16]">
+      {blobs.map((b, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full blur-[90px]"
+          style={{ width: b.size, height: b.size, left: b.x, top: b.y, background: b.color }}
+          animate={{ x: b.dx, y: b.dy }}
+          transition={{ duration: b.dur, repeat: Infinity, ease: "easeInOut" }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function Hero() {
   return (
     <section id="top" className="grain relative overflow-hidden px-4 pt-32 pb-20 sm:px-6 md:pt-40 md:pb-28">
+      <AmbientMesh />
       <div className="hairline-grid pointer-events-none absolute inset-0" />
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.25fr_1fr]">
         <div>

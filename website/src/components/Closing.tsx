@@ -3,7 +3,10 @@
 import { Check, Copy, FileText, Mail, Presentation } from "lucide-react";
 import { useState } from "react";
 import { affiliation, authors, bibtex, paper } from "@/data/site";
-import { Card, GithubIcon, Reveal, Section } from "./ui";
+import { Card, GithubIcon, Reveal, Section, TiltCard } from "./ui";
+
+const takeawayGlows = ["var(--color-rose)", "var(--color-indigo)", "var(--color-teal)", "var(--color-gold)"];
+const teamGlows = ["var(--color-rose)", "var(--color-indigo)", "var(--color-teal)", "var(--color-gold)", "#8a4fbf", "var(--color-ink-2)"];
 
 export function Takeaways() {
   const items = [
@@ -17,11 +20,13 @@ export function Takeaways() {
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((it, i) => (
           <Reveal key={it.t} delay={i * 0.06}>
-            <div className="h-full rounded-3xl border border-line bg-card p-6 shadow-[var(--shadow-soft)]">
-              <div className="font-serif text-5xl text-rose/25">{i + 1}</div>
-              <h3 className="mt-3 text-base font-semibold text-ink">{it.t}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{it.d}</p>
-            </div>
+            <TiltCard glow={takeawayGlows[i % takeawayGlows.length]} className="h-full">
+              <div className="h-full rounded-3xl border border-line bg-card p-6 shadow-[var(--shadow-soft)]">
+                <div className="font-serif text-5xl text-rose/25">{i + 1}</div>
+                <h3 className="mt-3 text-base font-semibold text-ink">{it.t}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{it.d}</p>
+              </div>
+            </TiltCard>
           </Reveal>
         ))}
       </div>
@@ -67,21 +72,23 @@ export function Team() {
           const initials = a.name.replace(/\./g, " ").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("");
           return (
             <Reveal key={a.name} delay={i * 0.05}>
-              <div className="group flex h-full items-center gap-4 rounded-2xl border border-line bg-card p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
-                <div
-                  className="grid h-14 w-14 shrink-0 place-items-center rounded-full font-serif text-lg text-white"
-                  style={{ background: ["var(--color-rose)", "var(--color-indigo)", "var(--color-teal)", "var(--color-gold)", "#8a4fbf", "var(--color-ink-2)"][i % 6] }}
-                >
-                  {initials}
+              <TiltCard glow={teamGlows[i % teamGlows.length]} className="h-full">
+                <div className="group flex h-full items-center gap-4 rounded-2xl border border-line bg-card p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+                  <div
+                    className="grid h-14 w-14 shrink-0 place-items-center rounded-full font-serif text-lg text-white"
+                    style={{ background: teamGlows[i % teamGlows.length] }}
+                  >
+                    {initials}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-semibold text-ink">{a.name}</div>
+                    <div className="text-xs text-muted">{a.supervisor ? "Supervisor" : a.lead ? "First author" : "Co-author"} · BAUET ICE</div>
+                    <a href={`mailto:${a.email}`} className="mt-1 inline-flex items-center gap-1 truncate text-xs text-faint transition hover:text-rose">
+                      <Mail size={11} /> {a.email}
+                    </a>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <div className="font-semibold text-ink">{a.name}</div>
-                  <div className="text-xs text-muted">{a.supervisor ? "Supervisor" : a.lead ? "First author" : "Co-author"} · BAUET ICE</div>
-                  <a href={`mailto:${a.email}`} className="mt-1 inline-flex items-center gap-1 truncate text-xs text-faint transition hover:text-rose">
-                    <Mail size={11} /> {a.email}
-                  </a>
-                </div>
-              </div>
+              </TiltCard>
             </Reveal>
           );
         })}
