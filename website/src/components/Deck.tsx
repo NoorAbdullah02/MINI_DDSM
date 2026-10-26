@@ -24,6 +24,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { create as createQR } from "qrcode";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { deckNotes } from "@/data/deckNotes";
 import results from "@/data/results.json";
 import { affiliation, audit, authors, comparison, operatingPoints, paper } from "@/data/site";
 import { downloadPptx } from "@/lib/exportPptx";
@@ -163,7 +164,7 @@ const slides: Slide[] = [
   {
     title: "Title",
     accent: "var(--color-rose)",
-    notes: "Good morning. I'm Sheikh Noor Abdullah from BAUET. Our paper asks a simple question: how good is breast-cancer classification on Mini-DDSM when we evaluate it honestly, patient by patient?",
+    notes: deckNotes[0],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="relative flex h-full flex-col justify-center">
         <div className="pointer-events-none absolute -right-10 -top-16 select-none font-serif text-[340px] leading-none text-ink/[0.035]">01</div>
@@ -199,7 +200,7 @@ const slides: Slide[] = [
   {
     title: "Motivation",
     accent: "var(--color-gold)",
-    notes: "Breast cancer is the most diagnosed cancer in women — 2.43 million new cases in GLOBOCAN 2024. Deep learning can help screening, but reported accuracy depends heavily on how the data are split.",
+    notes: deckNotes[1],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="grid h-full grid-cols-[1.1fr_1fr] items-center gap-16">
         <div>
@@ -220,7 +221,7 @@ const slides: Slide[] = [
   {
     title: "The problem",
     accent: "var(--color-rose)",
-    notes: "Here's the catch. Mini-DDSM has several views per patient. If a patient's CC and MLO images fall on both sides of the split, the model is partly tested on someone it has already seen. Several prior papers report 0.87 to 0.99 accuracy without saying whether they grouped by patient.",
+    notes: deckNotes[2],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>The problem</Kicker></Item>
@@ -269,7 +270,7 @@ const slides: Slide[] = [
   {
     title: "Data audit",
     accent: "var(--color-indigo)",
-    notes: "So before building any fold, we audited every identifier. Three raw IDs appear in both Benign and Cancer folders — we key groups by class folder plus ID. Four eight-image blocks are kept intact. Fourteen exact duplicate pairs, none crossing groups. Result: 2,417 patient groups and zero leakage on all nine splits.",
+    notes: deckNotes[3],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>Contribution 1 · Data audit</Kicker></Item>
@@ -293,7 +294,7 @@ const slides: Slide[] = [
   {
     title: "Pipeline",
     accent: "var(--color-indigo)",
-    notes: "The pipeline is deliberately simple. Otsu crop to 512, four-view test-time augmentation, two ImageNet backbones, average to a patient score, then a fixed 50/50 ensemble — no weights tuned on test data.",
+    notes: deckNotes[4],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>Contribution 2 · Method</Kicker></Item>
@@ -315,7 +316,7 @@ const slides: Slide[] = [
   {
     title: "Protocol",
     accent: "var(--color-indigo)",
-    notes: "Evaluation is nested. Each outer training fold is split into inner train and inner validation by patient. Checkpoints, Youden thresholds and Platt scaling come only from inner validation, then are frozen. The outer test fold is untouched until the end. We repeat everything with three seeds.",
+    notes: deckNotes[5],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>Contribution 3 · Protocol</Kicker></Item>
@@ -351,7 +352,7 @@ const slides: Slide[] = [
   {
     title: "Main result",
     accent: "var(--color-rose)",
-    notes: "Across three seeds, the ensemble reaches ROC-AUC 0.891 plus-minus 0.008 and PR-AUC 0.830. That beats EfficientNet-B4 at 0.882, ConvNeXtV2 at 0.857 and the fold-selected single best at 0.878.",
+    notes: deckNotes[6],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="grid h-full grid-cols-[1fr_640px] items-center gap-16">
         <div>
@@ -380,7 +381,7 @@ const slides: Slide[] = [
   {
     title: "Ablation",
     accent: "var(--color-rose)",
-    notes: "The ablation shows the fixed average wins on five of six metrics. EfficientNet alone stays more sensitive at 0.5 — so the ensemble improves discrimination but doesn't dominate every operating point.",
+    notes: deckNotes[7],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>Ablation</Kicker></Item>
@@ -433,7 +434,7 @@ const slides: Slide[] = [
   {
     title: "Operating point",
     accent: "var(--color-rose)",
-    notes: "Ranking isn't the whole story. At 0.5 the model is specific — 92.6% — but misses many cancers. Using the Youden threshold chosen on training-side validation raises sensitivity from 0.62 to 0.79 and cuts missed cancers from about 343 to 191 per seed.",
+    notes: deckNotes[8],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>Operating point</Kicker></Item>
@@ -469,7 +470,7 @@ const slides: Slide[] = [
   {
     title: "Calibration",
     accent: "var(--color-teal)",
-    notes: "Platt scaling, fit only on inner validation, lowers Brier from 0.136 to 0.124 and ECE from 0.075 to 0.023. Decision-curve analysis shows positive net benefit from 0.05 to 0.80 in every seed — still internal evidence only.",
+    notes: deckNotes[9],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>Beyond AUC</Kicker></Item>
@@ -486,7 +487,7 @@ const slides: Slide[] = [
   {
     title: "Grad-CAM",
     accent: "var(--color-gold)",
-    notes: "Grad-CAM gives a qualitative look. For true positives, attention concentrates on the lesion; for false negatives it's near the lesion but too weak. We present this as a transparency aid, not validated localisation.",
+    notes: deckNotes[10],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>Explainability</Kicker></Item>
@@ -507,7 +508,7 @@ const slides: Slide[] = [
   {
     title: "Limitations",
     accent: "var(--color-ink-2)",
-    notes: "Limitations: one dataset, three folds, eight-image identifiers kept as conservative groups, and Grad-CAM is qualitative. Next we'll apply the same protocol to CBIS-DDSM and INbreast with radiologist review.",
+    notes: deckNotes[11],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
         <Item><Kicker>Honest limits · Future work</Kicker></Item>
@@ -534,7 +535,7 @@ const slides: Slide[] = [
   {
     title: "Thank you",
     accent: "var(--color-rose)",
-    notes: "To summarise: audit first, a simple ensemble wins, thresholds matter, and we're honest about the limits. Everything — code, splits and audit files — is public. Scan the QR code to try the live demo on your own phone. Thank you; happy to take questions.",
+    notes: deckNotes[12],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="grid h-full grid-cols-[1fr_auto] items-center gap-14">
         <div>
@@ -576,7 +577,7 @@ const slides: Slide[] = [
   {
     title: "Any questions?",
     accent: "var(--color-indigo)",
-    notes: "That's the talk. I'm glad to take questions — on the patient-grouping protocol, the ensemble, the thresholds, or what we'd do differently on a second dataset.",
+    notes: deckNotes[13],
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="relative flex h-full flex-col items-center justify-center text-center">
         <div className="pointer-events-none absolute -right-6 bottom-0 select-none font-serif text-[420px] italic leading-none text-indigo/[0.05]">?</div>

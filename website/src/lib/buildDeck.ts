@@ -8,6 +8,7 @@
 
 import type PptxGenJS from "pptxgenjs";
 import results from "../data/results.json";
+import { deckNotes } from "../data/deckNotes";
 import { affiliation, audit, authors, comparison, operatingPoints, paper } from "../data/site";
 
 // Brand palette as hex (no CSS vars — PowerPoint needs literal hex).
@@ -85,6 +86,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 1 — Title
   {
     const s = base();
+    s.addNotes(deckNotes[0]);
     s.addShape(pres.ShapeType.roundRect, {
       x: MX, y: 0.55, w: 5.3, h: 0.42, rectRadius: 0.21, fill: { color: C.goldSoft }, line: { color: C.gold, width: 0.75 },
     });
@@ -109,6 +111,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 2 — Motivation
   {
     const s = base();
+    s.addNotes(deckNotes[1]);
     kicker(s, "Why it matters");
     title(s, "2.43 million women were diagnosed with breast cancer in 2024.", { fontSize: 27, w: 7.6 });
     s.addText("Benign and malignant findings look alike and readers are overloaded. AI can help — if its accuracy is real.", {
@@ -133,6 +136,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 3 — The problem
   {
     const s = base();
+    s.addNotes(deckNotes[2]);
     kicker(s, "The problem");
     title(s, "Same patient on both sides of the split → inflated scores.", { fontSize: 26 });
     const panels: [string, boolean][] = [["Image-level split", false], ["Patient-grouped split", true]];
@@ -160,6 +164,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 4 — Data audit
   {
     const s = base();
+    s.addNotes(deckNotes[3]);
     kicker(s, "Contribution 1 · Data audit");
     title(s, "Every identifier audited before a single fold is built.", { fontSize: 26 });
     const cols = 3, gw = (W - 0.4) / cols;
@@ -173,6 +178,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 5 — Pipeline
   {
     const s = base();
+    s.addNotes(deckNotes[4]);
     kicker(s, "Contribution 2 · Method");
     title(s, "Simple pipeline. Fixed 50/50 ensemble. No test-set tuning.", { fontSize: 26 });
     s.addImage({ data: pipeline, x: MX, y: 2.7, w: W, h: 4.1, sizing: { type: "contain", w: W, h: 4.1 } });
@@ -181,6 +187,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 6 — Protocol
   {
     const s = base();
+    s.addNotes(deckNotes[5]);
     kicker(s, "Contribution 3 · Protocol");
     title(s, "Nested, patient-grouped, repeated three times.", { fontSize: 26 });
     s.addShape(pres.ShapeType.roundRect, { x: MX, y: 2.8, w: 4.9, h: 2.1, rectRadius: 0.1, fill: { color: C.indigoSoft }, line: { color: C.indigo, width: 0.75 } });
@@ -200,6 +207,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 7 — Main result
   {
     const s = base();
+    s.addNotes(deckNotes[6]);
     kicker(s, "Results");
     title(s, "Ensemble ROC-AUC 0.891 ± 0.008", { fontSize: 28, w: 6 });
     const rows: [string, string, string][] = [["Equal-average ensemble", "0.891", C.rose], ["EfficientNet-B4", "0.882", C.gold], ["Fold-selected single best", "0.878", C.ink2], ["ConvNeXtV2-Tiny", "0.857", C.indigo]];
@@ -239,6 +247,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 8 — Ablation
   {
     const s = base();
+    s.addNotes(deckNotes[7]);
     kicker(s, "Ablation");
     title(s, "Best on 5 of 6 metrics — without learning any weights.", { fontSize: 26 });
     const header = [{ text: "Metric", options: { bold: true, color: C.muted, fontSize: 10.5 } }, ...comparison.methods.map((m, i) => ({ text: m, options: { bold: true, color: i === 3 ? C.rose : C.muted, fontSize: 10.5, align: "right" as const } }))];
@@ -261,6 +270,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 9 — Operating point
   {
     const s = base();
+    s.addNotes(deckNotes[8]);
     kicker(s, "Operating point");
     title(s, "Youden threshold: sensitivity 0.62 → 0.79", { fontSize: 27 });
     (["default", "youden"] as const).forEach((k, pi) => {
@@ -282,6 +292,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 10 — Calibration
   {
     const s = base();
+    s.addNotes(deckNotes[9]);
     kicker(s, "Beyond AUC");
     title(s, "Calibrated probabilities and positive net benefit.", { fontSize: 27 });
     const stats: [string, string, string][] = [["0.136 → 0.124", "Brier score (Platt)", C.teal], ["0.075 → 0.023", "Expected calibration error", C.teal], ["0.05–0.80", "Threshold range with net benefit", C.ink]];
@@ -292,6 +303,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 11 — Grad-CAM
   {
     const s = base();
+    s.addNotes(deckNotes[10]);
     kicker(s, "Explainability");
     title(s, "Where the network looks — qualitatively.", { fontSize: 27 });
     const imgs: [string, string][] = [["True positive", gcTp], ["True negative", gcTn], ["False positive", gcFp], ["False negative", gcFn]];
@@ -306,6 +318,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 12 — Limitations
   {
     const s = base();
+    s.addNotes(deckNotes[11]);
     kicker(s, "Honest limits · Future work");
     title(s, "What this study does not claim.", { fontSize: 27 });
     const items: [string, string][] = [
@@ -327,6 +340,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 13 — Thank you
   {
     const s = base();
+    s.addNotes(deckNotes[12]);
     kicker(s, "Takeaways");
     const cards: [string, string][] = [["Protocol first", "0 leaked patient groups"], ["Simple ensemble", "ROC-AUC 0.891"], ["Thresholds matter", "Sensitivity 0.79"], ["Calibrated", "ECE 0.023"]];
     cards.forEach(([t, d], i) => {
@@ -353,6 +367,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   // 14 — Any questions?
   {
     const s = base();
+    s.addNotes(deckNotes[13]);
     const lead = authors.find((a) => a.lead) ?? authors[0];
     s.addText("?", { x: 8.3, y: 0.3, w: 5, h: 7, fontFace: SERIF, fontSize: 420, italic: true, color: C.indigo, transparency: 95, align: "right" });
     kicker(s, "Q & A");
