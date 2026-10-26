@@ -33,7 +33,7 @@ const C = {
 
 const SERIF = "Georgia";
 const SANS = "Calibri";
-const MONO = "Consolas";
+const MONO = "Courier New";
 
 // Downsample the 51-point ROC grid to a clean, editable ~13-point chart.
 function downsample<T>(arr: T[], n: number): T[] {
@@ -125,6 +125,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
         chartColors: [C.ink2, C.ink2, C.rose],
         barGapWidthPct: 40,
         showLegend: false, showTitle: false, showValue: true,
+        dataLabelFormatCode: "0.00",
         dataLabelFontSize: 11, dataLabelColor: C.ink, dataLabelPosition: "outEnd",
         catAxisLabelFontSize: 10, catAxisLabelColor: C.muted,
         valAxisHidden: true, valAxisMinVal: 0, valAxisMaxVal: 2.7,
@@ -155,6 +156,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
           const cx = gx + (gi % 4) * 0.42;
           const cy = 3.65 + Math.floor(gi / 4) * 0.42;
           s.addShape(pres.ShapeType.roundRect, { x: cx, y: cy, w: 0.36, h: 0.36, rectRadius: 0.06, fill: { color: cols[(p - 1) % 4] } });
+          s.addText(`P${p}`, { x: cx, y: cy, w: 0.36, h: 0.36, fontFace: SANS, fontSize: 8, bold: true, color: "FFFFFF", align: "center", valign: "middle" });
         });
       });
       s.addText(ok ? "No patient appears in both sets." : "P1, P2, P3 leak into the test set.", { x: x + 0.3, y: 5.5, w: w - 0.6, h: 0.4, fontFace: SANS, fontSize: 11, color: C.ink2 });
@@ -361,7 +363,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
     s.addText("TRY IT LIVE", { x: qx, y: qy + 0.15, w: 2, h: 0.25, fontFace: SANS, fontSize: 9, bold: true, color: C.rose, align: "center", charSpacing: 1 });
     s.addImage({ data: qr, x: qx + 0.3, y: qy + 0.45, w: 1.4, h: 1.4 });
     s.addText("Scan to run the model on your phone", { x: qx + 0.1, y: qy + 1.95, w: 1.8, h: 0.5, fontFace: SANS, fontSize: 8.5, color: C.muted, align: "center" });
-    s.addText("mini-ddsm-csde2026.vercel.app", { x: qx + 0.1, y: qy + 2.45, w: 1.8, h: 0.25, fontFace: MONO, fontSize: 7.5, color: C.ink2, align: "center" });
+    s.addText("mini-ddsm-csde2026.vercel.app", { x: qx, y: qy + 2.45, w: 2, h: 0.25, fontFace: MONO, fontSize: 7, color: C.ink2, align: "center" });
   }
 
   // 14 — Any questions?
@@ -383,7 +385,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
       const x = MX + i * 3.9;
       s.addShape(pres.ShapeType.roundRect, { x, y: 4.3, w: 3.6, h: 1, rectRadius: 0.08, fill: { color: C.card }, line: { color: C.line, width: 0.75 } });
       s.addText(k, { x: x + 0.25, y: 4.42, w: 3.1, h: 0.3, fontFace: SANS, fontSize: 10, bold: true, color: C.indigo, charSpacing: 1 });
-      s.addText(v, { x: x + 0.25, y: 4.72, w: 3.1, h: 0.45, fontFace: MONO, fontSize: 11, color: C.ink2 });
+      s.addText(v, { x: x + 0.15, y: 4.72, w: 3.3, h: 0.45, fontFace: MONO, fontSize: 10, color: C.ink2 });
     });
   }
 }
