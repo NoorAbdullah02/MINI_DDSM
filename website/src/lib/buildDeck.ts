@@ -108,6 +108,30 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
     });
   }
 
+  // 1b — Agenda
+  {
+    const s = base();
+    s.addNotes(deckNotes[14]);
+    kicker(s, "Agenda");
+    title(s, "What this talk covers.", { fontSize: 28 });
+    const items: [string, string][] = [
+      ["The problem", "Why same-patient splits inflate accuracy"],
+      ["Data audit & method", "Patient grouping, pipeline, protocol"],
+      ["Results", "Ensemble vs. backbones, operating points"],
+      ["Calibration & Grad-CAM", "Beyond AUC, qualitative explainability"],
+      ["Limitations", "What this study does not claim"],
+      ["References & Q&A", "Sources, then your questions"],
+    ];
+    items.forEach(([t, d], i) => {
+      const x = MX + (i % 3) * (W / 3 + 0.1);
+      const y = 2.9 + Math.floor(i / 3) * 1.9;
+      s.addShape(pres.ShapeType.roundRect, { x, y, w: W / 3 - 0.1, h: 1.7, rectRadius: 0.1, fill: { color: C.card }, line: { color: C.line, width: 0.75 } });
+      s.addText(String(i + 1).padStart(2, "0"), { x: x + 0.25, y: y + 0.2, w: 1, h: 0.4, fontFace: MONO, fontSize: 13, bold: true, color: C.indigo });
+      s.addText(t, { x: x + 0.25, y: y + 0.65, w: W / 3 - 0.6, h: 0.6, fontFace: SANS, fontSize: 14, bold: true, color: C.ink });
+      s.addText(d, { x: x + 0.25, y: y + 1.15, w: W / 3 - 0.6, h: 0.5, fontFace: SANS, fontSize: 10.5, color: C.muted });
+    });
+  }
+
   // 2 — Motivation
   {
     const s = base();
@@ -337,6 +361,31 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
       s.addText(d, { x: x + 0.25, y: y + 0.5, w: W / 2 - 0.6, h: 0.55, fontFace: SANS, fontSize: 10.5, color: C.muted });
     });
     s.addText("Next → CBIS-DDSM and INbreast · richer metadata · radiologist review.", { x: MX, y: 5.7, w: W, h: 0.4, fontFace: SANS, fontSize: 13, color: C.ink2 });
+  }
+
+  // 12b — References
+  {
+    const s = base();
+    s.addNotes(deckNotes[15]);
+    kicker(s, "Sources");
+    title(s, "References.", { fontSize: 28 });
+    const refs = [
+      "[1] H. Sung et al., “Global cancer statistics 2024,” CA Cancer J. Clin., 2026.",
+      "[2] C. D. Lekamlage et al., “Mini-DDSM: Mammography age estimation,” Proc. DMIP, 2020.",
+      "[3] M. Tan and Q. V. Le, “EfficientNet: Rethinking model scaling for CNNs,” Proc. ICML, 2019.",
+      "[4] S. Woo et al., “ConvNeXt V2: Co-designing and scaling ConvNets with MAE,” Proc. CVPR, 2023.",
+      "[5] R. R. Selvaraju et al., “Grad-CAM: Visual explanations via gradient localization,” Proc. ICCV, 2017.",
+      "[6] M. Heenaye-Mamode Khan et al., “Multi-class classification of breast abnormalities,” PLOS ONE, 2021.",
+      "[7] A. Sahu, P. K. Das, and S. Meher, “High accuracy hybrid CNN classifiers for breast cancer,” Biomed. Signal Process. Control, 2023.",
+      "[8] Y. Khourdifi et al., “Early breast cancer detection based on deep learning,” BioMedInformatics, 2024.",
+      "[9] I. Loshchilov and F. Hutter, “Decoupled weight decay regularization,” Proc. ICLR, 2019.",
+      "[10] N. Otsu, “A threshold selection method from gray-level histograms,” IEEE Trans. SMC, 1979.",
+    ];
+    s.addShape(pres.ShapeType.roundRect, { x: MX, y: 2.7, w: W, h: 3.9, rectRadius: 0.1, fill: { color: C.card }, line: { color: C.line, width: 0.75 } });
+    refs.forEach((r, i) => {
+      const col = i % 2, row = Math.floor(i / 2);
+      s.addText(r, { x: MX + 0.3 + col * (W / 2 - 0.2), y: 3.0 + row * 0.68, w: W / 2 - 0.5, h: 0.62, fontFace: SANS, fontSize: 10.5, color: C.ink2, valign: "top" });
+    });
   }
 
   // 13 — Thank you

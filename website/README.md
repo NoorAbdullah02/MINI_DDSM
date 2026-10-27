@@ -7,7 +7,7 @@ Tailwind CSS v4, Motion and ONNX Runtime Web.
 | Route | What it is |
 |---|---|
 | `/` | Project page: problem, data audit, method, interactive results, live demo, Grad-CAM, BibTeX, team |
-| `/present` | 14-slide conference deck (see **Present** below) |
+| `/present` | 16-slide conference deck, following the official IEEE CSDE 2026 template's section flow (see **Present** below) |
 
 ## Present
 
@@ -26,7 +26,7 @@ Tailwind CSS v4, Motion and ONNX Runtime Web.
 | `Esc` | Close the overview grid |
 
 `/present#7` deep-links to slide 7. The footer also has a **Download .pptx** button that
-builds the same 14 slides as a standalone PowerPoint file, entirely in the browser (see
+builds the same 16 slides as a standalone PowerPoint file, entirely in the browser (see
 below) — useful as a backup when there's no reliable way to show the website itself at the
 venue.
 
@@ -59,6 +59,20 @@ Re-generate it after changing any number in `src/data/site.ts` or any slide in
 
 ```bash
 npm run pptx
+```
+
+### Official IEEE CSDE 2026 template
+
+The organisers' own template ([`IEEE_CSDE_2026_Template.pptx`](../IEEE_CSDE_2026_Template.pptx)
+at the repo root) is filled in with this paper's real content — every shape, color, font and
+layout from the template untouched, only the placeholder text (and the one sample chart)
+replaced — as [`Mini-DDSM-CSDE2026-IEEE-Template.pptx`](../Mini-DDSM-CSDE2026-IEEE-Template.pptx).
+This is the one to use for the actual conference submission/talk; the richer deck above is the
+project's own extended version. Re-generate after editing `website/scripts/fill_ieee_template.py`:
+
+```bash
+pip install python-pptx
+python website/scripts/fill_ieee_template.py
 ```
 
 ## Develop

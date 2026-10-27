@@ -198,6 +198,35 @@ const slides: Slide[] = [
     ),
   },
   {
+    title: "Agenda",
+    accent: "var(--color-indigo)",
+    notes: deckNotes[14],
+    body: (
+      <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
+        <Item><Kicker>Agenda</Kicker></Item>
+        <Item><H>What this talk covers.</H></Item>
+        <div className="mt-12 grid grid-cols-3 gap-6">
+          {[
+            ["The problem", "Why same-patient splits inflate accuracy"],
+            ["Data audit & method", "Patient grouping, pipeline, protocol"],
+            ["Results", "Ensemble vs. backbones, operating points"],
+            ["Calibration & Grad-CAM", "Beyond AUC, qualitative explainability"],
+            ["Limitations", "What this study does not claim"],
+            ["References & Q&A", "Sources, then your questions"],
+          ].map(([t, d], i) => (
+            <Item key={t}>
+              <div className="h-full rounded-2xl border border-line bg-card p-6">
+                <div className="font-mono text-sm font-semibold text-indigo">{String(i + 1).padStart(2, "0")}</div>
+                <div className="mt-2 text-lg font-semibold text-ink">{t}</div>
+                <div className="mt-1 text-sm text-muted">{d}</div>
+              </div>
+            </Item>
+          ))}
+        </div>
+      </Stagger>
+    ),
+  },
+  {
     title: "Motivation",
     accent: "var(--color-gold)",
     notes: deckNotes[1],
@@ -529,6 +558,40 @@ const slides: Slide[] = [
           ))}
         </div>
         <Item><p className="mt-10 text-[24px] text-ink-2">Next → CBIS-DDSM and INbreast · richer metadata · radiologist review.</p></Item>
+      </Stagger>
+    ),
+  },
+  {
+    title: "References",
+    accent: "var(--color-ink-2)",
+    notes: deckNotes[15],
+    body: (
+      <Stagger variants={stagger} initial="hidden" animate="show" className="flex h-full flex-col justify-center">
+        <Item><Kicker>Sources</Kicker></Item>
+        <Item><H>References.</H></Item>
+        <Item>
+          <div className="mt-10 rounded-2xl border border-line bg-card p-8">
+            <ol className="grid grid-cols-2 gap-x-10 gap-y-4 text-[15px] leading-relaxed text-ink-2">
+              {[
+                "H. Sung et al., “Global cancer statistics 2024,” CA Cancer J. Clin., 2026.",
+                "C. D. Lekamlage et al., “Mini-DDSM: Mammography age estimation,” Proc. DMIP, 2020.",
+                "M. Tan and Q. V. Le, “EfficientNet: Rethinking model scaling for CNNs,” Proc. ICML, 2019.",
+                "S. Woo et al., “ConvNeXt V2: Co-designing and scaling ConvNets with MAE,” Proc. CVPR, 2023.",
+                "R. R. Selvaraju et al., “Grad-CAM: Visual explanations via gradient localization,” Proc. ICCV, 2017.",
+                "M. Heenaye-Mamode Khan et al., “Multi-class classification of breast abnormalities,” PLOS ONE, 2021.",
+                "A. Sahu, P. K. Das, and S. Meher, “High accuracy hybrid CNN classifiers for breast cancer,” Biomed. Signal Process. Control, 2023.",
+                "Y. Khourdifi et al., “Early breast cancer detection based on deep learning,” BioMedInformatics, 2024.",
+                "I. Loshchilov and F. Hutter, “Decoupled weight decay regularization,” Proc. ICLR, 2019.",
+                "N. Otsu, “A threshold selection method from gray-level histograms,” IEEE Trans. SMC, 1979.",
+              ].map((r, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className="shrink-0 font-mono text-xs text-faint">[{i + 1}]</span>
+                  <span>{r}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </Item>
       </Stagger>
     ),
   },

@@ -17,4 +17,9 @@ export const deckNotes = [
   "Limitations: one dataset, three folds, eight-image identifiers kept as conservative groups, and Grad-CAM is qualitative. Next we'll apply the same protocol to CBIS-DDSM and INbreast with radiologist review.",
   "To summarise: audit first, a simple ensemble wins, thresholds matter, and we're honest about the limits. Everything — code, splits and audit files — is public. Scan the QR code to try the live demo on your own phone. Thank you; happy to take questions.",
   "That's the talk. I'm glad to take questions — on the patient-grouping protocol, the ensemble, the thresholds, or what we'd do differently on a second dataset.",
+  // 14 — Agenda (inserted after the title slide; kept at the end of this
+  // array so every existing index above stays stable).
+  "Here's how the talk is organised: the problem with naive splits, how we audited the data, the method, the results, calibration and explainability, then what the study doesn't claim — and we'll close with references and questions.",
+  // 15 — References
+  "These are the core references behind the dataset, the two backbones, the explainability method, and the prior Mini-DDSM reports we compare against — the full list is in the paper.",
 ] as const;
