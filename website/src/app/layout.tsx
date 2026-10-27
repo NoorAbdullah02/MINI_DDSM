@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { Caladea, Carlito, Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -9,6 +9,10 @@ const fraunces = Fraunces({
   axes: ["opsz", "SOFT"],
 });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"] });
+// Metric-compatible libre clones of the IEEE CSDE 2026 template's Cambria /
+// Calibri — used only inside /present, which re-skins to the template.
+const caladea = Caladea({ variable: "--font-caladea", subsets: ["latin"], weight: ["400", "700"] });
+const carlito = Carlito({ variable: "--font-carlito", subsets: ["latin"], weight: ["400", "700"] });
 
 const title = "Multi-Backbone Ensemble Learning on Mini-DDSM · IEEE CSDE 2026";
 const description =
@@ -27,7 +31,7 @@ export const viewport: Viewport = { themeColor: "#fbfaf7" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${jetbrains.variable}`}>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${jetbrains.variable} ${caladea.variable} ${carlito.variable}`}>
       <body>{children}</body>
     </html>
   );

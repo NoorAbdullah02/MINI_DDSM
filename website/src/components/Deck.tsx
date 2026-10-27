@@ -169,6 +169,9 @@ const slides: Slide[] = [
       <Stagger variants={stagger} initial="hidden" animate="show" className="relative flex h-full flex-col justify-center">
         <div className="pointer-events-none absolute -right-10 -top-16 select-none font-serif text-[340px] leading-none text-ink/[0.035]">01</div>
         <Item>
+          <Image src="/figures/csde-logo.png" alt="IEEE CSDE 2026" width={64} height={64} className="mb-5" />
+        </Item>
+        <Item>
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-gold/30 bg-gold-soft px-5 py-2 text-[18px] font-semibold text-gold">
             <span className="h-2 w-2 animate-pulse rounded-full bg-gold" /> {paper.venueShort} · Paper #{paper.paperId} · {paper.location}
           </div>
@@ -602,6 +605,7 @@ const slides: Slide[] = [
     body: (
       <Stagger variants={stagger} initial="hidden" animate="show" className="grid h-full grid-cols-[1fr_auto] items-center gap-14">
         <div>
+          <Item><Image src="/figures/csde-logo.png" alt="IEEE CSDE 2026" width={52} height={52} className="mb-4" /></Item>
           <Item><Kicker>Takeaways</Kicker></Item>
           <div className="mt-6 grid grid-cols-2 gap-5">
             {[
@@ -1046,7 +1050,36 @@ export function Deck() {
   }, [exportState.phase]);
 
   return (
-    <div className="flex h-dvh flex-col bg-paper-2">
+    <div
+      className="flex h-dvh flex-col bg-paper-2"
+      style={
+        {
+          // Re-skin to the official IEEE CSDE 2026 template's own palette and
+          // fonts (Cambria/Calibri, via their free metric clones) — scoped to
+          // this subtree only, so the rest of the site keeps its own brand.
+          "--font-serif": "var(--font-caladea)",
+          "--font-sans": "var(--font-carlito)",
+          "--color-paper": "#ffffff",
+          "--color-paper-2": "#eaf0f7",
+          "--color-card": "#ffffff",
+          "--color-line": "#dce6f0",
+          "--color-line-2": "#c3d2e0",
+          "--color-ink": "#1a2433",
+          "--color-ink-2": "#0b2545",
+          "--color-muted": "#5c6b7a",
+          "--color-faint": "#8da9c4",
+          "--color-rose": "#d1495b",
+          "--color-rose-soft": "#fbe8ea",
+          "--color-rose-deep": "#a83349",
+          "--color-teal": "#1c7293",
+          "--color-teal-soft": "#e3eef2",
+          "--color-indigo": "#3e7cb1",
+          "--color-indigo-soft": "#e8f0f7",
+          "--color-gold": "#f2a900",
+          "--color-gold-soft": "#fdf1d9",
+        } as React.CSSProperties
+      }
+    >
       <LaserDot active={laser} />
       <div className="flex min-h-0 flex-1">
         <div
@@ -1084,6 +1117,13 @@ export function Deck() {
             </AnimatePresence>
 
             <TickBar i={i} total={slides.length} onJump={jump} />
+
+            {slides[i].title !== "Title" && slides[i].title !== "Thank you" && (
+              <div className="absolute right-[110px] top-10 flex items-center gap-2 rounded-full bg-ink px-3.5 py-1.5 text-[12px] font-semibold text-white">
+                <Image src="/figures/csde-logo.png" alt="" width={16} height={16} />
+                {paper.venueShort}
+              </div>
+            )}
 
             <div className="absolute inset-x-[110px] bottom-8 flex items-center justify-between text-[15px] text-faint">
               <span>{paper.venueShort} · Mini-DDSM patient-grouped ensemble</span>

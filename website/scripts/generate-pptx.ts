@@ -33,6 +33,7 @@ async function main() {
     gcTn: fileToDataUrl("figures/gc_tn_overlay.jpg", "image/jpeg"),
     gcFp: fileToDataUrl("figures/gc_fp_overlay.jpg", "image/jpeg"),
     gcFn: fileToDataUrl("figures/gc_fn_overlay.jpg", "image/jpeg"),
+    logo: fileToDataUrl("figures/csde-logo.png", "image/png"),
   };
 
   buildDeck(pres, assets);

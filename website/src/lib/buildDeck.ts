@@ -11,27 +11,32 @@ import results from "../data/results.json";
 import { deckNotes } from "../data/deckNotes";
 import { affiliation, audit, authors, comparison, operatingPoints, paper } from "../data/site";
 
-// Brand palette as hex (no CSS vars — PowerPoint needs literal hex).
+// The official IEEE CSDE 2026 template's own palette (ppt/theme/theme1.xml
+// in IEEE_CSDE_2026_Template.pptx) — matches the website's /present, which
+// re-skins to the same colors.
 const C = {
-  paper: "FBFAF7",
+  paper: "FFFFFF",
   card: "FFFFFF",
-  line: "E8E3D8",
-  ink: "1F2A52",
-  ink2: "3D4873",
-  muted: "6B7394",
-  faint: "9AA0B8",
-  rose: "C23A6B",
-  roseSoft: "FBE9EF",
-  roseDeep: "9E2453",
-  teal: "2F8F83",
-  tealSoft: "E3F3F0",
-  indigo: "4B5BD6",
-  indigoSoft: "EBEDFC",
-  gold: "B8913F",
-  goldSoft: "F7F0DE",
+  line: "DCE6F0",
+  ink: "1A2433",
+  ink2: "0B2545",
+  muted: "5C6B7A",
+  faint: "8DA9C4",
+  rose: "D1495B",
+  roseSoft: "FBE8EA",
+  roseDeep: "A83349",
+  teal: "1C7293",
+  tealSoft: "E3EEF2",
+  indigo: "3E7CB1",
+  indigoSoft: "E8F0F7",
+  gold: "F2A900",
+  goldSoft: "FDF1D9",
 } as const;
 
-const SERIF = "Georgia";
+// Cambria / Calibri — the template's own fonts, present on every real
+// PowerPoint install (LibreOffice substitutes its own metric-compatible
+// clones automatically, same as this repo's web fonts do).
+const SERIF = "Cambria";
 const SANS = "Calibri";
 const MONO = "Courier New";
 
@@ -48,9 +53,10 @@ export type DeckAssets = {
   gcTn: string;
   gcFp: string;
   gcFn: string;
+  logo: string;
 };
 
-export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcFn }: DeckAssets) {
+export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcFn, logo }: DeckAssets) {
   pres.defineLayout({ name: "WIDE", width: 13.333, height: 7.5 });
   pres.layout = "WIDE";
   pres.author = authors.find((a) => a.lead)?.name ?? authors[0].name;
@@ -87,11 +93,12 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   {
     const s = base();
     s.addNotes(deckNotes[0]);
+    s.addImage({ data: logo, x: MX, y: 0.5, w: 0.7, h: 0.7 });
     s.addShape(pres.ShapeType.roundRect, {
-      x: MX, y: 0.55, w: 5.3, h: 0.42, rectRadius: 0.21, fill: { color: C.goldSoft }, line: { color: C.gold, width: 0.75 },
+      x: MX + 0.9, y: 0.65, w: 5.3, h: 0.42, rectRadius: 0.21, fill: { color: C.goldSoft }, line: { color: C.gold, width: 0.75 },
     });
     s.addText(`${paper.venueShort} · Paper #${paper.paperId} · ${paper.location}`, {
-      x: MX + 0.15, y: 0.55, w: 5, h: 0.42, fontFace: SANS, fontSize: 11, bold: true, color: C.gold, valign: "middle",
+      x: MX + 1.05, y: 0.65, w: 5, h: 0.42, fontFace: SANS, fontSize: 11, bold: true, color: C.gold, valign: "middle",
     });
     s.addText(
       [{ text: "Multi-Backbone Ensemble Learning for ", options: {} }, { text: "Robust", options: { italic: true, color: C.rose } }, { text: " Breast Cancer Classification on Mini-DDSM", options: {} }],
@@ -392,6 +399,7 @@ export function buildDeck(pres: PptxGenJS, { pipeline, qr, gcTp, gcTn, gcFp, gcF
   {
     const s = base();
     s.addNotes(deckNotes[12]);
+    s.addImage({ data: logo, x: 13.333 - MX - 0.6, y: 0.4, w: 0.6, h: 0.6 });
     kicker(s, "Takeaways");
     const cards: [string, string][] = [["Protocol first", "0 leaked patient groups"], ["Simple ensemble", "ROC-AUC 0.891"], ["Thresholds matter", "Sensitivity 0.79"], ["Calibrated", "ECE 0.023"]];
     cards.forEach(([t, d], i) => {

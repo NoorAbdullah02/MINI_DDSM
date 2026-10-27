@@ -24,17 +24,18 @@ export async function downloadPptx(onProgress?: (label: string) => void) {
   const pres = new PptxGenJS();
 
   onProgress?.("Fetching figures…");
-  const [pipeline, qr, gcTp, gcTn, gcFp, gcFn] = await Promise.all([
+  const [pipeline, qr, gcTp, gcTn, gcFp, gcFn, logo] = await Promise.all([
     toDataUrl("/figures/pipeline.png"),
     qrDataUrl("https://mini-ddsm-csde2026.vercel.app/#demo", { errorCorrectionLevel: "M", margin: 1, width: 400 }),
     toDataUrl("/figures/gc_tp_overlay.jpg"),
     toDataUrl("/figures/gc_tn_overlay.jpg"),
     toDataUrl("/figures/gc_fp_overlay.jpg"),
     toDataUrl("/figures/gc_fn_overlay.jpg"),
+    toDataUrl("/figures/csde-logo.png"),
   ]);
 
   onProgress?.("Building slides…");
-  const assets: DeckAssets = { pipeline, qr, gcTp, gcTn, gcFp, gcFn };
+  const assets: DeckAssets = { pipeline, qr, gcTp, gcTn, gcFp, gcFn, logo };
   buildDeck(pres, assets);
 
   onProgress?.("Preparing download…");
